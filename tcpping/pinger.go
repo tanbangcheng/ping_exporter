@@ -103,9 +103,11 @@ func (c *Collector) ping(remote string) time.Duration {
 			return 0
 		}
 	}
-	defer cc.Close()
-
-	return time.Since(start)
+	cost := time.Since(start)
+	if cc != nil {
+		cc.Close()
+	}
+	return cost
 }
 
 func (c *Collector) Run() {
