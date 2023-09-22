@@ -25,7 +25,7 @@ type Collector struct {
 }
 
 func NewCollector(remotes []string) *Collector {
-	return &Collector{
+	c := &Collector{
 		LatencyMaxUs: prometheus.NewGaugeVec(prometheus.GaugeOpts{
 			Namespace:   "tcp_ping",
 			Name:        "latency_max_us",
@@ -47,6 +47,8 @@ func NewCollector(remotes []string) *Collector {
 		ring:    make(chan *pingResult, 10000),
 		remotes: remotes,
 	}
+
+	return c
 }
 
 func (c *Collector) Describe(descs chan<- *prometheus.Desc) {

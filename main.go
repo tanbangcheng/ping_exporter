@@ -154,6 +154,7 @@ func startMonitor(cfg *config.Config) (*mon.Monitor, error) {
 
 	if len(cfg.TcpTargets) > 0 {
 		c := tcpping.NewCollector(cfg.TcpTargets)
+		prometheus.MustRegister(c)
 		go c.Run()
 	}
 
