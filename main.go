@@ -152,13 +152,6 @@ func startMonitor(cfg *config.Config) (*mon.Monitor, error) {
 		pinger.SetPayloadSize(cfg.Ping.Size)
 	}
 
-	if len(cfg.TcpTargets) > 0 {
-		log.Printf("tcp targets: %v", cfg.TcpTargets)
-		c := tcpping.NewCollector(cfg.TcpTargets)
-		prometheus.MustRegister(c)
-		go c.Run()
-	}
-
 	monitor := mon.New(pinger,
 		cfg.Ping.Interval.Duration(),
 		cfg.Ping.Timeout.Duration())
@@ -226,6 +219,13 @@ func startServer(cfg *config.Config, monitor *mon.Monitor) {
 		monitor:      monitor,
 		customLabels: newCustomLabelSet(cfg.Targets),
 	})
+
+	if len(cfg.TcpTargets) > 0 {
+		log.Printf("tcp targets: %v", cfg.TcpTargets)
+		c := tcpping.NewCollector(cfg.TcpTargets)
+		reg.MustRegister(c)
+		go c.Run()
+	}
 
 	l := log.New()
 	l.Level = log.ErrorLevel

@@ -2,7 +2,6 @@ package tcpping
 
 import (
 	"github.com/prometheus/client_golang/prometheus"
-	log "github.com/sirupsen/logrus"
 	"net"
 	"sync"
 	"time"
@@ -53,14 +52,12 @@ func NewCollector(remotes []string) *Collector {
 }
 
 func (c *Collector) Describe(descs chan<- *prometheus.Desc) {
-	log.Printf("describe")
 	c.LatencyMaxUs.Describe(descs)
 	c.Lost.Describe(descs)
 	c.Send.Describe(descs)
 }
 
 func (c *Collector) Collect(metrics chan<- prometheus.Metric) {
-	log.Printf("collect")
 	c.mu.Lock()
 	results := make([]*pingResult, 0, len(c.ring))
 
