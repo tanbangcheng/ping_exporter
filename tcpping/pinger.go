@@ -82,6 +82,10 @@ func (c *Collector) Collect(metrics chan<- prometheus.Metric) {
 	max := map[string]int64{}
 
 	for _, r := range results {
+		c.Lost.WithLabelValues(r.remote).Set(0)
+	}
+
+	for _, r := range results {
 		c.Send.WithLabelValues(r.remote).Add(1)
 		if r.rtt == 0 {
 			c.Lost.WithLabelValues(r.remote).Add(1)
