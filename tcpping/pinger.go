@@ -75,6 +75,7 @@ func (c *Collector) Collect(metrics chan<- prometheus.Metric) {
 
 	c.LatencyMaxUs.Reset()
 	c.Lost.Reset()
+	c.Send.Reset()
 
 	for _, r := range results {
 		c.LatencyMaxUs.WithLabelValues(r.remote).Set(float64(r.rtt.Microseconds()))
