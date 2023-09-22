@@ -7,6 +7,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"fmt"
+	"github.com/czerwonk/ping_exporter/tcpping"
 	"net"
 	"net/http"
 	"os"
@@ -149,6 +150,11 @@ func startMonitor(cfg *config.Config) (*mon.Monitor, error) {
 
 	if pinger.PayloadSize() != cfg.Ping.Size {
 		pinger.SetPayloadSize(cfg.Ping.Size)
+	}
+
+	if len(cfg.TcpTargets) > 0 {
+		c := tcpping.NewCollector(cfg.TcpTargets)
+		go c.Run()
 	}
 
 	monitor := mon.New(pinger,

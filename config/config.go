@@ -13,6 +13,8 @@ import (
 type Config struct {
 	Targets []TargetConfig `yaml:"targets"`
 
+	TcpTargets []string `yaml:"tcpTargets"`
+
 	Ping struct {
 		Interval duration `yaml:"interval"`
 		Timeout  duration `yaml:"timeout"`
