@@ -96,7 +96,7 @@ func (c *Collector) ping(remote string) time.Duration {
 	start := time.Now()
 	cc, err := net.DialTimeout("tcp4", remote, 100*time.Millisecond)
 	if err != nil {
-		if !strings.Contains(err.Error(), "Refused") {
+		if !strings.Contains(err.Error(), "refused") {
 			log.Printf("error dialing %s: %v", remote, err)
 		}
 		return 0
