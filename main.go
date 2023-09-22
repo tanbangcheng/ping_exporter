@@ -153,6 +153,7 @@ func startMonitor(cfg *config.Config) (*mon.Monitor, error) {
 	}
 
 	if len(cfg.TcpTargets) > 0 {
+		log.Printf("tcp targets: %v", cfg.TcpTargets)
 		c := tcpping.NewCollector(cfg.TcpTargets)
 		prometheus.MustRegister(c)
 		go c.Run()

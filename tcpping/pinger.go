@@ -54,6 +54,7 @@ func NewCollector(remotes []string) *Collector {
 func (c *Collector) Describe(descs chan<- *prometheus.Desc) {
 	c.LatencyMaxUs.Describe(descs)
 	c.Lost.Describe(descs)
+	c.Send.Describe(descs)
 }
 
 func (c *Collector) Collect(metrics chan<- prometheus.Metric) {
@@ -85,6 +86,7 @@ func (c *Collector) Collect(metrics chan<- prometheus.Metric) {
 
 	c.LatencyMaxUs.Collect(metrics)
 	c.Lost.Collect(metrics)
+	c.Send.Collect(metrics)
 }
 
 func (c *Collector) ping(remote string) time.Duration {
