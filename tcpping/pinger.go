@@ -2,7 +2,9 @@ package tcpping
 
 import (
 	"github.com/prometheus/client_golang/prometheus"
+	"log"
 	"net"
+	"strings"
 	"sync"
 	"time"
 )
@@ -94,6 +96,9 @@ func (c *Collector) ping(remote string) time.Duration {
 	start := time.Now()
 	cc, err := net.DialTimeout("tcp4", remote, 100*time.Millisecond)
 	if err != nil {
+		if !strings.Contains(err.Error(), "Refused") {
+			log.Printf("error dialing %s: %v", remote, err)
+		}
 		return 0
 	}
 	defer cc.Close()
