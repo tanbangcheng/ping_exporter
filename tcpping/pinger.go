@@ -105,11 +105,11 @@ func (c *Collector) ping(remote string) time.Duration {
 	start := time.Now()
 	cc, err := net.DialTimeout("tcp4", remote, 100*time.Millisecond)
 	if err != nil {
-		if !strings.Contains(err.Error(), "refused") {
-			log.Printf("error dialing %s: %v", remote, err)
-		}
 		if strings.Contains(err.Error(), "timeout") {
 			return 0
+		}
+		if !strings.Contains(err.Error(), "refused") {
+			log.Printf("error dialing %s: %v", remote, err)
 		}
 	}
 	cost := time.Since(start)
