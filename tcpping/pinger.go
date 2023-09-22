@@ -99,9 +99,12 @@ func (c *Collector) ping(remote string) time.Duration {
 		if !strings.Contains(err.Error(), "refused") {
 			log.Printf("error dialing %s: %v", remote, err)
 		}
-		return 0
+		if strings.Contains(err.Error(), "timeout") {
+			return 0
+		}
 	}
 	defer cc.Close()
+
 	return time.Since(start)
 }
 
