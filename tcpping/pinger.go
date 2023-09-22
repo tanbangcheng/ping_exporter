@@ -79,12 +79,21 @@ func (c *Collector) Collect(metrics chan<- prometheus.Metric) {
 	c.Lost.Reset()
 	c.Send.Reset()
 
+	max := map[string]int64{}
+
 	for _, r := range results {
-		c.LatencyMaxUs.WithLabelValues(r.remote).Set(float64(r.rtt.Microseconds()))
 		c.Send.WithLabelValues(r.remote).Add(1)
 		if r.rtt == 0 {
 			c.Lost.WithLabelValues(r.remote).Add(1)
 		}
+		m := max[r.remote]
+		if m < r.rtt.Microseconds() {
+			max[r.remote] = r.rtt.Microseconds()
+		}
+	}
+
+	for k, v := range max {
+		c.LatencyMaxUs.WithLabelValues(k).Set(float64(v))
 	}
 
 	c.LatencyMaxUs.Collect(metrics)
